@@ -1,0 +1,115 @@
+Ядро проекта не модифицировалось
+	Не понятно, почему система тестирования посчитала измененными эти файлы. Часть из них относится к модулям, которые вообще не используются в проекте.
+
+Сайт проекта добавлен и корректно настроен
+	Сайт и шаблон проекта добавлен и настроен
+	
+Настроены все типы меню
+	Все меню настроены и включено кеширование
+	
+Поддерживаются технологии "Эрмитаж"
+	Технологии "Эрмитаж" поддерживаются
+
+Настроены инфоблоки
+	Все типы инфоблоков и сами инфоблоки настроены
+	
+Настроены стандартные компоненты
+	Стандартные компоненты настроены и включено кеширование
+	
+Настроены интерфейсы «Эрмитаж»
+	Интерфейсы "Эрмитаж" работают корректно	
+	
+Настроены шаблоны компонентов
+	Все шаблоны компонентов настроены
+	
+Удалены тестовые данные
+	Отсутствуют тестовые учетные записи, группы, страницы и файлы
+
+Настроены политики безопасности по работе с БД
+	Политика хостинга не позволяет использовать числа в качестве символов в пароле в БД
+
+Настроен журнал системных событий
+	Журнал системных событий настроен. Проактивный фильтр включен.
+
+Введена информация о хостинге
+	Хостинг - timeweb.ru 
+	Тариф - Optimo+
+	
+Тесты окружения платформы
+	Есть замечания. "Размер стека и pcre.recursion_limit" и "Агенты выполняются на хитах, рекомендуется перевести выполнение агентов на cron". Изменить эти значение на сервере нет возможности. 
+
+Настроена почтовая подсистема хостинга
+	Веб-проект отправляет почтовые сообщения (проверено тестовым выпуском рассылки)
+
+Введена информация об интеграторе решения
+	В файле /bitrix/php_interface/this_site_support.php введена контактная информация и логотип партнера, интегрировавшем данное решение
+
+Введена информация о техподдержке проекта
+	В файле /bitrix/php_interface/this_site_support.php введена контактная информация и логотип партнера, оказывающем техническую поддержку веб-проекта
+
+
+	
+	
+	
+	
+<?
+	$this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "ELEMENT_EDIT"));
+	$this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], CIBlock::GetArrayByID($arParams["IBLOCK_ID"], "ELEMENT_DELETE"), array("CONFIRM" => GetMessage('NEWS_ELEMENT_DELETE_CONFIRM')));	
+
+?>
+
+
+ id="<?=$this->GetEditAreaId($arItem['ID']);?>"
+ 
+ 
+ 
+ 
+ 
+ALTER DATABASE XXX DEFAULT COLLATE utf8_unicode_ci;
+ 
+ 
+ 
+<IfModule mod_php5.c>
+  php_flag session.use_trans_sid off
+  #php_value display_errors 1
+  php_value mbstring.internal_encoding UTF-8
+  php_value mbstring.func_overload 2
+  php_value max_input_vars 10000
+  php_value apc.num_files_hint 0
+  php_value apc.user_entries_hint 0
+  php_value apc.ttl 86400
+</IfModule>
+
+ 
+Хостинг - timeweb.ru 
+Тариф	- 2xOptimo
+
+
+
+
+ALTER TABLE `b_bp_workflow_instance` MODIFY `WORKFLOW` mediumblob NULL DEFAULT NULL  ;
+
+В таблице b_bp_workflow_instance поле WORKFLOW "blob NULL DEFAULT NULL  " не соответствует описанию на диске "mediumblob NULL DEFAULT NULL  "
+ 
+ 
+Контактные данные
+	Сазонов Иван Владимирович
+	Kislorod
+	info@o2k.ru
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<IfModule mod_php5.c>
+  php_flag session.use_trans_sid off
+  php_value display_errors 1
+  php_value mbstring.internal_encoding UTF-8
+</IfModule>	

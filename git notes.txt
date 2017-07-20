@@ -1,0 +1,62 @@
+Постоянно забываю команды создания удаленной ветки и ее связывание с локальной.
+
+Надо добавить удаленную ветку, чтобы она синхронизировалась через pull/push.
+Сначала надо создать удаленную ветку:
+git push origin origin:refs/heads/new_branch_name
+
+Стянуть ее
+git pull origin
+
+Посмотреть появилась ли в списке удаленных веток:
+git branch -r
+
+Создать локальную ветку и закрепить ее за удаленной
+git checkout --track -b new_branch_name origin/new_branch_name
+
+Удалить удаленную ветку можно так
+git push origin :heads/new_branch_name
+
+Локальная ветка автоматически создается, когда делаем
+git checkout new_branch_name
+
+Слить локальную ветку с удаленной можно так:
+git checkout master
+git merge new_branch_name
+
+Удалить локальную ветку:
+git branch -d new_branch_name
+
+Удалить локальную ветку, которая не смержена:
+git branch -D new_branch_name
+
+Просмотреть изменения в файле, который находится в состоянии unstaged
+git diff
+
+Полезные ссылки:
+http://dev-lab.info/2013/08/%D1%88%D0%BF%D0%B0%D1%80%D0%B3%D0%B0%D0%BB%D0%BA%D0%B0-%D0%BF%D0%BE-git-%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%BD%D1%8B%D0%B5-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B-%D1%81%D0%BB%D0%B8%D1%8F%D0%BD/
+
+Решение конфликта
+https://githowto.com/ru/resolving_conflicts
+
+Проиндексировать все удаленные файлы 
+git ls-files --deleted -z | xargs -0 git rm
+
+Проиндексировать сразу все удаленные и обновленные файлы
+git add -u
+
+3 команды в одну строку add -> commit -> push
+git add . && git commit -m "Some text for commit" && git push
+
+Откатиться назад на коммит cdcb94e6ddf93300fcc179cd6153ea3212ae9a9e
+git reset --hard cdcb94e6ddf93300fcc179cd6153ea3212ae9a9e
+
+Отменить изменения в непроиндексированном файле
+git checkout -- <file>
+
+После того, как откат сделан, и выполнен очередной локальный коммит, при попытке сделать push в удаленный репозиторий, git может начать ругаться, что версия вашей ветки младше чем на github и вам надо сделать pull. Это лечится принудительным коммитом:
+git push -f origin master
+
+Про Git на пальцах (для переходящих с SVN) - http://habrahabr.ru/post/68341/
+Pro git - http://git-scm.com/book/ru/
+Git How To - http://githowto.com/ru/
+Магия Git - http://diseaz.github.io/gitmagic/

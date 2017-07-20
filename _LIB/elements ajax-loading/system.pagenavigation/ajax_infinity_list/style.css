@@ -1,0 +1,12 @@
+.show-more-items {
+	
+	width: 100%;
+	border: 1px solid #ccc;
+	height: 41px;
+	line-height: 38px;
+	font-size: 14px;
+}
+.show-more-items:hover {
+	background-color: #ccc;
+	color: #fff;
+}

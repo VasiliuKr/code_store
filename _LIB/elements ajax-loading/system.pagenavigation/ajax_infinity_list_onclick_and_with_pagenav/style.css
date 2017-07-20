@@ -1,0 +1,15 @@
+.show-more-items {
+	
+	width: 100%;
+	border: 1px solid #ccc;
+	height: 41px;
+	line-height: 38px;
+	font-size: 15px;
+}
+.show-more-items:hover {
+	background-color: #ccc;
+	color: #fff;
+}
+#ajax_nav {
+	margin-top: 65px;
+}

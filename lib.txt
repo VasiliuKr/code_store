@@ -1,0 +1,412 @@
+1.Отобразить вложенные в свойство теги HTML в шаблоне
+	Использовать метод PHP htmlspecialcharsBack()
+	Например: <?=htmlspecialcharsBack($arItem['PROPERTIES']['PRICE_SELL']['VALUE']['TEXT'])?>
+
+2.Отправка данных ajax-формы на почту (html, js, php) http://zombzone.ru/?p=39
+
+3.Настройка шаблона Битрикс для отдельного раздела на сайте
+	1) Настройки -> Сайты -> Шаблоны сайтов
+	2) Добавить шаблон -> указываем необходимые данные, сохраняем. После чего шаблон появляется /bitrix/templates/Наш шаблон.
+	3) Интеграция шаблона (CSS, JS, images)
+	4) Настройки -> Сайты -> Список сайтов. Выбираем наш сайт, в параметрах шаблона сайта добавляем новый шаблон с условием "Для папки или файла", где указываем необходимый путь.
+	
+4.Верстка макета на отдельной странице Битрикс
+	1) Создаем раздел
+	2) Заходим Наш раздел/index.php
+	3) Удаляем подключения шапки и подвала.
+	4) Пишем разметку, как обычно
+	5) Все assets кидаем в папку раздела.
+
+5.Готовое решение BXReady Интернет-магазин: нюансы
+	1. Микрофреймворк для шаблонов-представлений http://docs.kuznica74.ru/documentation/course/course19/lesson398/?LESSON_PATH=322.324.392.394.398
+	Стандартные представления элементов хранятся по следующему пути:
+	bitrix/tools/bxready2/collection/bxr_elements/
+
+6.Если не получается стандартно получить картинку раздела/подраздела инфоблока для вывода
+	$res = CIBlockSection::GetByID($arCurSection['ID']);   // получаем поля текущего раздела
+	$ar_res = $res->GetNext();
+	$sectionImg = CFile::ShowImage($ar_res['PICTURE']);   // получаем картинку текущего раздела, в параметрамх можно указать размеры и т.д.
+	<div><?=sectionImg?></div>   выводим картинку в нужном месте в разметке
+	либо
+	$sectionImg = File::GetFileArray($ar_res['PICTURE']);  // получаем массив данных картинки
+	<img src="<?=$sectionImg['SRC']?>"   выводим картинку в нужном месте в разметке
+
+7.Настройка счетчика Яндекс.метрики на успешную отправку формы в Битрикс
+	Простым <form onsubmit="yaCounter28226201.reachGoal('zayavka');"></form> редко получается воспользоваться, поэтому
+	находим в шаблоне формы блок, отвечающий за отражение текста об успешной отправке формы и вставляем ниже
+	<script type="text/javascript">
+	    window.onload = function() {
+	        yaCounter28226201.reachGoal('zayavka');
+	    }
+	</script>
+	Параметр для отладки ?_ym_debug=1 в конец url
+
+8.Добавление нового значения в заранее известное свойство типа "список"
+	<?
+		CModule::IncludeModule("iblock");
+
+		$ibpenum = new CIBlockPropertyEnum;
+		if($PropID = $ibpenum->Add(Array('PROPERTY_ID'=>133, 'VALUE'=>'New Enum 1', 'XML_ID' => 54)))
+			echo 'New ID:'.$PropID;
+	?>
+	добавит новое значение 'New Enum 1' в свойство типа "список" с ID = 133, и присвоит ему поле XML_ID = 54;
+
+9.Получаем список вариантов значений свойств типа "список"
+	<?
+		CModule::IncludeModule("iblock");
+
+		$property_enums = CIBlockPropertyEnum::GetList(Array("DEF"=>"DESC", "SORT"=>"ASC"), Array("IBLOCK_ID"=>$IBLOCK_ID_SKU));
+		while($enum_fields = $property_enums->GetNext())
+		{
+		   var_dump($enum_fields);
+		}
+	?>
+
+10.Установка значений нескольких свойств, типа "список" элемента (не обязательно всех)
+	<?
+		CModule::IncludeModule("iblock");
+
+		CIBlockElement::SetPropertyValuesEx($ID, $IBLOCK_ID, array("PROP_13" => 148, "SIZE" => 133));
+	?>
+	, где $ID - ID элемента
+	$IBLOCK_ID - ID инфоблока
+	"PROP_13" и "SIZE" - коды изменяемых свойств
+	148 и 133 - ID вариантов свойств типа "список"
+
+11.Получить все свойства инфоблока
+	<?
+		$IBLOCK_ID = 11;
+		$properties = CIBlockProperty::GetList(Array("sort"=>"asc", "name"=>"asc"), Array("ACTIVE"=>"Y", "IBLOCK_ID"=>$IBLOCK_ID));
+		while ($prop_fields = $properties->GetNext())
+		{
+		  echo $prop_fields["ID"]." - ".$prop_fields["NAME"]."<br>";
+		}
+	?>
+12.Если изменения в разметке сайта вступают в силу не сразу, а через нескольком минут (даже при очистке кеша), то возможно поможет
+	добавление php_value opcache.revalidate_freq 0 в .htaccess
+13.Нумерация и стилизация вложенных ol списков в разметке типа 1. Пункт_1
+																  1.1. Подпункт_1.1
+	ol
+	  li
+	    ol
+	      li
+	      li
+	ol {
+		counter-reset: parent-list;
+	}
+	ol ol {
+		counter-reset: sub-list;
+	}
+	ol li {
+		list-style: none;
+	}
+	ol li>:before {
+		counter-increment: parent-list;
+		content: counter(parent-list) ". ";
+	}
+	ol ol>li:before {
+	    counter-increment: sub-list;
+	    content: counter(parent-list) "." counter(sub-list) ". ";
+	}
+14.Подгрузка блока HTML через ajax на сайте Битрикс
+	в main.js
+	window.addEventListener('load',function() {
+    if (BX('eto_budet_slider') != null) {						// если на странице есть элемент с id="eto_budet_slider"
+        BX.ajax.get(
+            '/include/ajax/main_slider.php',					// получаем разметку из подключаемого файла
+            function (data) {
+                BX('eto_budet_slider').innerHTML = data;		// вставляем полученную разметку в элемент с id="eto_budet_slider"
+                main_slider_start();							// запуск какой-либо функции, если нужна
+            }
+        )
+    }
+});
+
+15.Опасный target="_blank" https://habrahabr.ru/post/282880/
+	Добавим в ссылку rel="noopener" или rel="nofollow noopener"
+
+16.Добавить для отдельных пунктов меню в код ссылки target="_blank"
+	В файл меню вносим в поле названия код HTML
+	<?
+	$arMenuLinks = Array(
+		Array(
+			"<b>О компании</b>", 
+			"/o-kompanii/", 
+			Array(), 
+			Array(), 
+			"" 
+		),
+		Array(
+			"наши салоны", 
+			"/nashi-salony/", 
+			Array(), 
+			Array(), 
+			"" 
+		),
+		Array(
+			"<a href='https://www.facebook.com/Delight.lighting' target='_blank' rel='nofollow noopener'>facebook</a>", 
+			"", 
+			Array(), 
+			Array(), 
+			"" 
+		),
+	?>
+
+17.Редирект c www на без www и со слешем в конце
+	http://web-optimizator.com/301-redirekt-htaccess/
+
+	В .htaccess добавляем
+		# Start code Redirect from www to without www and add "/" in the url end
+		    RewriteCond %{REQUEST_URI} !\?
+			RewriteCond %{REQUEST_URI} !\&
+			RewriteCond %{REQUEST_URI} !\=
+			RewriteCond %{REQUEST_URI} !\.
+			RewriteCond %{REQUEST_URI} !\/$
+			RewriteCond %{HTTP_HOST} ^www\.(.*)$
+			RewriteRule ^(.*)$ http://%1/$1/ [L,R=301]
+			 
+			RewriteCond %{REQUEST_URI} !\?
+			RewriteCond %{REQUEST_URI} !\&
+			RewriteCond %{REQUEST_URI} !\=
+			RewriteCond %{REQUEST_URI} !\.
+			RewriteCond %{REQUEST_URI} ![^\/]$
+			RewriteCond %{HTTP_HOST} ^www\.(.*)$
+			RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
+			 
+			RewriteCond %{REQUEST_URI} !\?
+			RewriteCond %{REQUEST_URI} !\&
+			RewriteCond %{REQUEST_URI} !\=
+			RewriteCond %{REQUEST_URI} !\.
+			RewriteCond %{REQUEST_URI} !\/$
+			RewriteCond %{HTTP_HOST} ^([^www].*)$
+			RewriteRule ^(.*)$ http://%1/$1/ [L,R=301]
+		# End code Redirect from www to without www and add "/" in the url end
+
+18.Перевод агентов на cron
+	1. Из /bitrix/php_interface/dbconn.php убрать любые упоминания: 
+		BX_CRONTAB
+		BX_CRONTAB_SUPPORT
+		NO_AGENT_CHECK
+		DisableEventsCheck 
+	2. В командной PHP-строке в админке выполнить: 
+		COption::SetOptionString("main", "agents_use_crontab", "N"); 
+		COption::SetOptionString("main", "check_agents", "N");  
+
+
+	3. Создать файл cron_events.php, и положить его в /bitrix/php_interface/, такого содержания: 
+		<?
+			$_SERVER['DOCUMENT_ROOT'] = realpath(dirname(__FILE__).'/../..');
+			$DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
+
+			define('NO_KEEP_STATISTIC', true);
+			define('NOT_CHECK_PERMISSIONS',true); 
+			define('BX_NO_ACCELERATOR_RESET', true);
+
+			require($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');
+
+			@set_time_limit(0);
+			@ignore_user_abort(true);
+
+			CAgent::CheckAgents();  
+			define('BX_CRONTAB', true);  
+			CAgent::CheckAgents();  
+			//require($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/tools/backup.php');
+		?>
+
+	CAgent::CheckAgents() вызывается два раза специально, чтобы выполнить как периодические агенты, так и не периодические. 
+	Если вам требуется, чтобы данный файл отвечал еще и за бекап, откомментируйте последнюю строчку.
+
+19.Получение всех подразделов инфоблока
+	<?
+		$arFilter = Array(
+			'IBLOCK_ID'=>18, 
+			'GLOBAL_ACTIVE'=>'Y');
+		$obSection = CIBlockSection::GetTreeList($arFilter);
+
+		while($arResult = $obSection->GetNext()){
+			for($i=0;$i<=($arResult['DEPTH_LEVEL']-2);$i++) {
+				echo $arResult['NAME'];
+			}
+			if($count == 10) break;
+		}
+	?>
+
+20.Не показывается страница с 404 ошибкой на несуществующих страницах комплексных компонентов 
+	http://romapad.ru/nastraivaem-pravilnuyu-otrabotku-404-oshibki-v-bitrikse/
+
+	404.php
+	<? if ($_SERVER['DOCUMENT_URI'] == "/404.php") {
+		 $_SERVER['REQUEST_URI'] = $_SERVER['DOCUMENT_URI'];
+	}
+	include_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/urlrewrite.php');
+	CHTTP::SetStatus('404 Not Found');
+	@define('ERROR_404', 'Y');
+	require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+	$APPLICATION->SetTitle("Страница не найдена"); ?>  
+	ТУТ ТЕКСТ ВСЯКИЙ
+	<? require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php"); ?>
+
+	.htaccess
+	ErrorDocument 404 /404.php
+
+	Настройки вызова компонента
+	Устанавливать статус 404: true
+
+	/bitrix/php_interface/init.php
+	<?
+	AddEventHandler('main', 'OnEpilog', '_Check404Error', 1);
+	function _Check404Error(){
+		if (defined('ERROR_404') && ERROR_404 == 'Y') {
+		global $APPLICATION;
+		$APPLICATION->RestartBuffer();
+		include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/header.php';
+		include $_SERVER['DOCUMENT_ROOT'] . '/404.php';
+		include $_SERVER['DOCUMENT_ROOT'] . SITE_TEMPLATE_PATH . '/footer.php';
+		}
+	}
+	?>
+
+21.Ограничить цикл foreach (php) количеством 2 элементов
+	$i = 0;
+	foreach($a as $key =>$one){
+	$i++;
+	if($i > 3) break;
+	  ...code ;
+	}
+
+22.Уведомление на почту при добавлении элемента в инфоблок
+	добавляем обработчик в /php_interface/init.php
+
+	AddEventHandler("iblock", "OnAfterIBlockElementAdd", Array("AfterBronAdd", "AfterBronAddSendMail"));
+	class AfterBronAdd
+	{
+		function AfterBronAddSendMail(&$arFields)
+		{
+	//Условие для инфоблока "Забронированная техника в наличии"
+			if($arFields["IBLOCK_ID"] == 36)
+			{
+	//Выбрали нужные свойства
+			$rsUser = CUser::GetByID($arFields["PROPERTY_VALUES"][347]["n0"]["VALUE"]);
+				$arUser = $rsUser->Fetch();
+
+			$res_SKU = CIBlockElement::GetByID($arFields["PROPERTY_VALUES"][346]["n0"]["VALUE"]);
+			if($ar_res = $res_SKU->GetNext())
+				$sku_name = $ar_res['NAME'];
+				
+			$arEventFields = array(
+				"RS_USER_EMAIL" => $arUser["EMAIL"],
+				"RS_DATE_CREATE" => date('d.m.Y H:i:s'),
+				"TORG_PRED" => $sku_name,
+				"QUANTITY" => $arFields["PROPERTY_VALUES"][348]["n0"]["VALUE"]
+			);
+
+			// echo "<pre>";
+			// print_r($arFields);
+			// echo "</pre>";
+			// die();
+			$siteIds = array("s1", "s3");
+		
+	//Отправили нужное письмо с вышеуказанными данными
+			CEvent::Send("DEALER_BRON", $siteIds, $arEventFields);
+
+			}
+		}
+	}
+
+23.Уведомление на почту при удалении элемента из инфоблока
+	AddEventHandler("iblock", "OnBeforeIBlockElementDelete", Array("AfterBronDelete", "AfterBronDeleteSendMail"));
+	class AfterBronDelete
+	{
+	    function AfterBronDeleteSendMail($ID)
+	    {
+	    	$arSort = array("SORT" => "ASC");
+			$arFilter = array("IBLOCK_ID" => 36, "ID" => $ID);
+			$arSelect = array("ID", "IBLOCK_ID", "CODE", "NAME", "PROPERTY_DEALER", "PROPERTY_TP_NAME", "PROPERTY_QUANTITY");
+			$arNavStartParams = false; // $arNavStartParams = array('iNumPage' => 1, 'nPageSize' => 10); -- для пагинации
+			$itemsBronList = CIBlockElement::GetList($arSort, $arFilter, false, $arNavStartParams, $arSelect);
+			
+			$bron_item = $itemsBronList->Fetch();
+
+	       if($bron_item["IBLOCK_ID"] == 36)
+			{
+	//Выбрали нужные свойства
+			$rsUser = CUser::GetByID($bron_item["PROPERTY_DEALER_VALUE"]);
+				$arUser = $rsUser->Fetch();
+
+			$arEventFields = array(
+				"RS_USER_EMAIL" => $arUser["EMAIL"],
+				"RS_DATE_CREATE" => date('d.m.Y H:i:s'),
+				"TORG_PRED" => $bron_item["PROPERTY_TP_NAME_VALUE"],
+				"QUANTITY" => $bron_item["PROPERTY_QUANTITY_VALUE"]
+			);
+
+			$siteIds = array("s1", "s3");
+		
+	//Отправили нужное письмо с вышеуказанными данными
+			CEvent::Send("DEALER_BRON_DELETE", $siteIds, $arEventFields);
+
+			} 
+	     }
+	}
+
+24.Формирование строки в title при постраничной навигации (например каталог)
+	В header.php вытаскиваем запрос, и если он содержит PAGEN_1, то формируем строку, которую надо дописать к title.
+
+	use \Bitrix\Main\Context;
+
+	$context = Context::getCurrent();
+	$arRequest = $context->getRequest()->toArray();
+	$pagenavTitle = array_key_exists('PAGEN_1', $arRequest) ? ' - Страница '.$arRequest['PAGEN_1'] : '';
+
+	//или через $_REQUEST['PAGEN_1']
+
+	// Далее, при формировании html 
+	<title>
+	   <? $APPLICATION->ShowTitle() ?>
+	   <?=$pagenavTitle?>
+	</title>
+
+25.Настроить канонические ссылки для карточек товара и разделов каталога
+	https://dev.1c-bitrix.ru/learning/course/?COURSE_ID=35&LESSON_ID=7199 для элементов
+
+	в section.php добавим
+	$APPLICATION->AddHeadString('<link rel="canonical" href="http://site.ru' . str_replace('index.php', '', $APPLICATION->GetCurPage(true)) . '" />');
+
+26.Добавить пользовательское поле с типом HTML/text
+	В init.php пишем
+
+	// Добавление пользовательского поля с типом данных HTML/text - start
+	class MyHtmlRedactorType extends CUserTypeString 
+	{
+		function GetUserTypeDescription() 
+			{
+				return array( 
+				"USER_TYPE_ID" => "c_string",
+				"CLASS_NAME" => "MyHtmlRedactorType",
+				"DESCRIPTION" => "Строка в html редакторе",
+				"BASE_TYPE" => "string",
+				);
+			}
+
+		function GetEditFormHTML($arUserField, $arHtmlControl) 
+			{
+				//if($arUserField["ENTITY_VALUE_ID"]<1 && strlen($arUserField["SETTINGS"]["DEFAULT_VALUE"]  ;)  >0) 
+				//	 $arHtmlControl["VALUE"] = htmlspecialchars($arUserField["SETTINGS"]["DEFAULT_VALUE"]  ;)  ; 
+				ob_start();
+				CFileMan::AddHTMLEditorFrame($arHtmlControl["NAME"],
+					$arHtmlControl["VALUE"],
+					"html",
+					"html",
+					440,
+					"N",
+					0,
+					"",
+					"",
+					$arIBlock["LID"]);
+				$b=ob_get_clean();
+				return $b;
+			}
+	}
+
+	AddEventHandler("main", "OnUserTypeBuildList", array("MyHtmlRedactorType", "GetUserTypeDescription"));
+	// Добавление пользовательского поля с типом данных HTML/text - end
