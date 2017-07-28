@@ -37,6 +37,7 @@ http://dev-lab.info/2013/08/%D1%88%D0%BF%D0%B0%D1%80%D0%B3%D0%B0%D0%BB%D0%BA%D0%
 
 Решение конфликта
 https://githowto.com/ru/resolving_conflicts
+При конфликте на dev переходим на свою ветку, делаем git pull origin dev, полчаем список конфликтов, правим вручную в конфликтных файлах на своей локальной ветке, добавляем, коммитим и пушим
 
 Проиндексировать все удаленные файлы 
 git ls-files --deleted -z | xargs -0 git rm
@@ -49,6 +50,9 @@ git add . && git commit -m "Some text for commit" && git push
 
 Откатиться назад на коммит cdcb94e6ddf93300fcc179cd6153ea3212ae9a9e
 git reset --hard cdcb94e6ddf93300fcc179cd6153ea3212ae9a9e
+
+Если надо вернуться на коммит, который мы отменили ресетом
+git reflog и находим пункт, на который хотим вернуться, допустим git reset --hard HEAD@{1} - коммит, с которого откатились назад
 
 Отменить изменения в непроиндексированном файле
 git checkout -- <file>

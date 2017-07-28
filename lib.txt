@@ -410,3 +410,6 @@
 
 	AddEventHandler("main", "OnUserTypeBuildList", array("MyHtmlRedactorType", "GetUserTypeDescription"));
 	// Добавление пользовательского поля с типом данных HTML/text - end
+
+27. Как убрать стандартный Open Graph из Аспро Оптимус
+	Закомментить или удалить подключение в файле bitrix/modules/aspro.optimuv/classes/general/COptimus.php
