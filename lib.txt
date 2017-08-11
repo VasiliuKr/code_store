@@ -39,6 +39,14 @@
 	        yaCounter28226201.reachGoal('zayavka');
 	    }
 	</script>
+
+	если блок, отвечающий за успешную отправку, не нашли, то можно через отлов успеха в массиве $_REQUEST
+	
+	<?if($arParams["WEB_FORM_ID"] == 18 && $_REQUEST["formresult"] == 'addok'){?>
+		<script>
+			yaCounter<?=$GLOBALS['METRIKA'];?>.reachGoal('VOPROS_ZAPCHASTI');
+		</script>
+	<?}?>
 	Параметр для отладки ?_ym_debug=1 в конец url
 
 8.Добавление нового значения в заранее известное свойство типа "список"
@@ -413,3 +421,28 @@
 
 27. Как убрать стандартный Open Graph из Аспро Оптимус
 	Закомментить или удалить подключение в файле bitrix/modules/aspro.optimuv/classes/general/COptimus.php
+
+28. Включить логирование 
+	определяем в самом начале  define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"]."/log_adadasdd.txt"); 
+	в теле функции 	
+	AddMessage2Log(print_r($arFields, true));
+	AddMessage2Log(print_r(debug_backtrace(), true));
+
+29. Поставить скрипт на cron через консоль crontab
+	В начало файла добавляем
+	#!/usr/bin/php5 -q
+	<?php
+
+	$_SERVER["DOCUMENT_ROOT"] = "/home/bitrix/ext_www/de-light.ru";
+	$DOCUMENT_ROOT = $_SERVER["DOCUMENT_ROOT"];
+	define("NO_KEEP_STATISTIC", true);
+	define("NOT_CHECK_PERMISSIONS", true);
+	set_time_limit(0);
+	define("LANG", "ru");
+	require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
+	// далее код
+
+	Заходим в консоль crontab -l получаем список задач на cron
+	crontab -e редактируем список
+	Если редактор Vim, то жмем i - переход в режим вставки, пишем что-то вроде 40 16 * * * /usr/bin/php -f /home/bitrix/ext_www/de-light.ru/bitrix/php_interface/include/catalog_export/yandex_for_twinsor_run.php && echo 'export for twinsor', жмем ESC и :wq

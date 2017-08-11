@@ -64,3 +64,5 @@ git push -f origin master
 Pro git - http://git-scm.com/book/ru/
 Git How To - http://githowto.com/ru/
 Магия Git - http://diseaz.github.io/gitmagic/
+
+советы на Хабре https://habrahabr.ru/company/mailru/blog/267595/
