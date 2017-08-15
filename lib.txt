@@ -446,3 +446,39 @@
 	Заходим в консоль crontab -l получаем список задач на cron
 	crontab -e редактируем список
 	Если редактор Vim, то жмем i - переход в режим вставки, пишем что-то вроде 40 16 * * * /usr/bin/php -f /home/bitrix/ext_www/de-light.ru/bitrix/php_interface/include/catalog_export/yandex_for_twinsor_run.php && echo 'export for twinsor', жмем ESC и :wq
+
+30. Поставить экспорт данных (выгрузка для Яндекс.маркет) на cron
+	Оболочка скрипта выгрузки - cron_frame.php, где нужно указать ID профиля выгрузки
+	http://forwww.com/bitrix-export-auto-update-cron/
+
+31. Условие для 2-й и последующих страниц при постраничной навигации в каталоге и т.п.
+	в файле шаблона компонента .section  <?if(!$_REQUEST['PAGEN_1'])?>
+
+32. Микроразметка schema.org для товара
+	в шаблоне карточки товара добавляем код ниже блока, отвечающего за отображение товара с основной инфой
+
+	<?/* Начало микроразметки schema.org по схеме Товар */?>
+	<div itemscope itemtype="http://schema.org/Product" style="display: none;">
+		<div itemprop="name"><span><?=$arResult["NAME"]?></span></div>
+		<?if(!empty($arResult["DETAIL_TEXT"])):?>
+			<span itemprop="description"><?=htmlspecialchars(strip_tags($arResult["DETAIL_TEXT"]))?></span>
+		<?else:?>
+			<span itemprop="description"><?=$arResult["NAME"]?></span>
+		<?endif;?>
+		<?if( !empty($arResult["PREVIEW_PICTURE"]) ):?>
+			<img src="<?=$arResult["PREVIEW_PICTURE"]["SRC"]?>" alt="<?=$a_alt;?>" title="<?=$a_title;?>" itemprop="image" />
+		<?elseif( !empty($arResult["DETAIL_PICTURE"])):?>
+			<?$img = CFile::ResizeImageGet($arResult["DETAIL_PICTURE"], array( "width" => 256, "height" => 170 ), BX_RESIZE_IMAGE_PROPORTIONAL,true );?>
+			<img src="<?=$img["src"]?>" alt="<?=$a_alt;?>" title="<?=$a_title;?>" itemprop="image" />
+		<?else:?>
+			<img src="<?=SITE_TEMPLATE_PATH?>/images/no_photo_medium.png" alt="<?=$a_alt;?>" title="<?=$a_title;?>" itemprop="image" />
+		<?endif;?>
+		<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+			<span itemprop="price"><?=$arResult["PRICES"]["BASE"]["VALUE_NOVAT"];?></span>
+			<span itemprop="priceCurrency"><?=$arResult["PRICES"]["BASE"]["CURRENCY"];?></span>
+		</div>
+	</div>
+	<?/*Конец микроразметки schema.org по схеме Товар*/?>
+
+33. Оптимизация скорости сайта под Google PageSpeed
+	https://artrix.spb.ru/articles/google-vs-1c/
