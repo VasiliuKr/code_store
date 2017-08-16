@@ -482,3 +482,8 @@
 
 33. Оптимизация скорости сайта под Google PageSpeed
 	https://artrix.spb.ru/articles/google-vs-1c/
+
+34. Всплывающее модальное окно на fancybox
+	Верстка
+	Кнопка <a href="#some-modal-block" class="fancybox-form">Кнопка</a>
+	Сам блок <div
