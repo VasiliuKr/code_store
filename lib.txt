@@ -486,4 +486,13 @@
 34. Всплывающее модальное окно на fancybox
 	Верстка
 	Кнопка <a href="#some-modal-block" class="fancybox-form">Кнопка</a>
-	Сам блок <div
+	Сам блок <div id="some-modal-block"></div>
+
+35. 301 редирект для файла Web.config на Windows-сервере (не тестировал!)
+	<configuration>
+		<location path="/Catalog/Ткани">
+	    <system.webServer>
+	      <httpRedirect enabled="true" destination="http://www.textileopt.ru/catalog/tkani/" exactDestination="true" httpResponseStatus="Permanent" />
+	    </system.webServer>
+	  </location>
+	</configuration>
