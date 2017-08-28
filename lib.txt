@@ -29,7 +29,9 @@
 	<div><?=sectionImg?></div>   выводим картинку в нужном месте в разметке
 	либо
 	$sectionImg = File::GetFileArray($ar_res['PICTURE']);  // получаем массив данных картинки
+	или $sectionImg = CFile::GetPath($ar_res['PICTURE']);  // получаем путь картинки
 	<img src="<?=$sectionImg['SRC']?>"   выводим картинку в нужном месте в разметке
+	
 
 7.Настройка счетчика Яндекс.метрики на успешную отправку формы в Битрикс
 	Простым <form onsubmit="yaCounter28226201.reachGoal('zayavka');"></form> редко получается воспользоваться, поэтому
@@ -488,11 +490,30 @@
 	Кнопка <a href="#some-modal-block" class="fancybox-form">Кнопка</a>
 	Сам блок <div id="some-modal-block"></div>
 
-35. 301 редирект для файла Web.config на Windows-сервере (не тестировал!)
-	<configuration>
-		<location path="/Catalog/Ткани">
-	    <system.webServer>
-	      <httpRedirect enabled="true" destination="http://www.textileopt.ru/catalog/tkani/" exactDestination="true" httpResponseStatus="Permanent" />
-	    </system.webServer>
-	  </location>
-	</configuration>
+35. 301 редирект для файла Web.config на Windows-сервере
+	<system.webServer>
+	   <rewrite>
+	       <rules>
+	           <rule name="tkani" stopProcessing="true">
+	               <match url="catalog/ткани" />
+	               <action type="Redirect" url="http://www.textileopt.ru/catalog/tkani/" />
+	           </rule>
+	           <rule name="satin" stopProcessing="true">
+	               <match url="catalog/ткани/сатин" />
+	               <action type="Redirect" url="http://www.textileopt.ru/catalog/tkani/satin/" />
+	           </rule>
+	       </rules>
+	   </rewrite>
+	</system.webServer>
+
+36. Получить пользовательское свойство раздела UF_*
+	$arFilterUfImg = array(
+	    "IBLOCK_ID" => 12,  // необходимый ID инфоблока
+	    "ID" => $arResult["IBLOCK_SECTION_ID"]
+	);
+	$arSelectUfImg = array("ID", "NAME", "UF_SCHEMA_IMG");  // свое свойство UF_название свойства
+
+	$res_uf_img = CIBlockSection::GetList(array(), $arFilterUfImg, false, $arSelectUfImg);
+	while ($item_uf_img = $res_uf_img->Fetch()) {
+		echo $item_uf_img['UF_SCHEMA_IMG'];
+	}
