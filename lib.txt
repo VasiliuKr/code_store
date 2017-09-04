@@ -517,3 +517,21 @@
 	while ($item_uf_img = $res_uf_img->Fetch()) {
 		echo $item_uf_img['UF_SCHEMA_IMG'];
 	}
+
+37. Повесить обработчик событий jQuery на элементы, созданные динамически (на js или ajax)
+
+	Для динамических элементов используется делегированная обработка собятий, и схематически это выглядит так:
+	$('parent_static').on('event', 'children_dinamic', handler);
+	Где parent_static - это статичный родительский элемент (лучше ближайший, но подойдёт и body), event - событие, children_dinamic - дочерний динамический элемент, на котором обработчик и должен сработать. При этом указатель this или объект jQuery $(this) в обработчике - имено дочерний динамический элемент.
+
+	http://jsfiddle.net/5g7r4mhq/
+
+	$('body').on('click', '.office_title_link', function(e){   // .office_title_link - динамически созданный элемент
+		e.preventDefault();
+		console.log("hello");
+	});
+
+38. Изменить текст кнопки, по которой кликаем на jQuery (типа toggle)
+	var $this = $(this);
+	var buttonText = $this.text() === "Подробнее" ? "Свернуть" : "Подробнее";
+	$this.text(buttonText);
