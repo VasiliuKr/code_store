@@ -29,7 +29,9 @@
 	<div><?=sectionImg?></div>   выводим картинку в нужном месте в разметке
 	либо
 	$sectionImg = File::GetFileArray($ar_res['PICTURE']);  // получаем массив данных картинки
+	или $sectionImg = CFile::GetPath($ar_res['PICTURE']);  // получаем путь картинки
 	<img src="<?=$sectionImg['SRC']?>"   выводим картинку в нужном месте в разметке
+	
 
 7.Настройка счетчика Яндекс.метрики на успешную отправку формы в Битрикс
 	Простым <form onsubmit="yaCounter28226201.reachGoal('zayavka');"></form> редко получается воспользоваться, поэтому
@@ -486,4 +488,94 @@
 34. Всплывающее модальное окно на fancybox
 	Верстка
 	Кнопка <a href="#some-modal-block" class="fancybox-form">Кнопка</a>
-	Сам блок <div
+	Сам блок <div id="some-modal-block"></div>
+
+35. 301 редирект для файла Web.config на Windows-сервере
+	<system.webServer>
+	   <rewrite>
+	       <rules>
+	           <rule name="tkani" stopProcessing="true">
+	               <match url="catalog/ткани" />
+	               <action type="Redirect" url="http://www.textileopt.ru/catalog/tkani/" />
+	           </rule>
+	           <rule name="satin" stopProcessing="true">
+	               <match url="catalog/ткани/сатин" />
+	               <action type="Redirect" url="http://www.textileopt.ru/catalog/tkani/satin/" />
+	           </rule>
+	       </rules>
+	   </rewrite>
+	</system.webServer>
+
+36. Получить пользовательское свойство раздела UF_*
+	$arFilterUfImg = array(
+	    "IBLOCK_ID" => 12,  // необходимый ID инфоблока
+	    "ID" => $arResult["IBLOCK_SECTION_ID"]
+	);
+	$arSelectUfImg = array("ID", "NAME", "UF_SCHEMA_IMG");  // свое свойство UF_название свойства
+
+	$res_uf_img = CIBlockSection::GetList(array(), $arFilterUfImg, false, $arSelectUfImg);
+	while ($item_uf_img = $res_uf_img->Fetch()) {
+		echo $item_uf_img['UF_SCHEMA_IMG'];
+	}
+
+37. Повесить обработчик событий jQuery на элементы, созданные динамически (на js или ajax)
+
+	Для динамических элементов используется делегированная обработка собятий, и схематически это выглядит так:
+	$('parent_static').on('event', 'children_dinamic', handler);
+	Где parent_static - это статичный родительский элемент (лучше ближайший, но подойдёт и body), event - событие, children_dinamic - дочерний динамический элемент, на котором обработчик и должен сработать. При этом указатель this или объект jQuery $(this) в обработчике - имено дочерний динамический элемент.
+
+	http://jsfiddle.net/5g7r4mhq/
+
+	$('body').on('click', '.office_title_link', function(e){   // .office_title_link - динамически созданный элемент
+		e.preventDefault();
+		console.log("hello");
+	});
+
+38. Изменить текст кнопки, по которой кликаем на jQuery (типа toggle)
+	var $this = $(this);
+	var buttonText = $this.text() === "Подробнее" ? "Свернуть" : "Подробнее";
+	$this.text(buttonText);
+
+39. Хаки для разных версий браузеров https://browserstrangeness.bitbucket.io/css_hacks.html#webkit
+
+40. При использовании #SECTION_CODE_PATH# в ЧПУ элементы, находящиеся в корне инофоблока, будут выдавать 404 ошибку.
+	Для исправления можно пользоваться данным решением https://dev.1c-bitrix.ru/support/forum/forum6/topic63829/
+
+	1. размещаем компонент news в папке /news/ 
+	2. В компоненте news устанавливаем параметр "SEF_FOLDER" => "/", 
+	3. Далее в этом же компоненте: 
+
+	"SEF_URL_TEMPLATES" => array( 
+	"news" => "/news/", 
+	"section" => "news/#SECTION_CODE_PATH#/", 
+	"detail" => "#SECTION_CODE_PATH#/#ELEMENT_CODE#/", ) 
+
+	4. в шаблоне news.list заменить href="<?echo $arItem["DETAIL_PAGE_URL"]?>" на href="/news<?echo $arItem["DETAIL_PAGE_URL"]?>" 
+
+	5. в файле urlrewrite.php должно быть: 
+	array( 
+	"CONDITION" => "#^/news/#", 
+	"RULE" => "", 
+	"ID" => "bitrix:news", 
+	"PATH" => "/news/index.php", 
+	),
+
+41. Если редирект с http на https происходит с кодом 302, а нужен 301 (одно из возможных решений, не везде подойдет!)
+	Решения для Битрикс https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=35&LESSON_ID=3261
+	
+	в .htaccess добавить
+
+	RewriteEngine On
+	RewriteBase /
+	RewriteCond %{HTTP:X-HTTPS} !1
+	RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+	второй вариант
+	RewriteCond %{HTTPS} off
+	RewriteCond %{HTTP:X-Forwarded-Proto} !https
+	RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+	если при редиректе добавляется 80 порт
+	RewriteEngine On
+	RewriteCond %{SERVER_PORT} 80
+	RewriteRule ^(.*)$ https://sports-tech.ru/$1 [R=301,L]

@@ -1,11 +1,9 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
 <?CJSCore::Init(array("jquery"));?>
-
 <?
 $arResult["NavQueryString"] = str_replace('&amp;','&',$arResult["NavQueryString"]);
 $do = preg_match('/.*bxajaxid=(\S+).*/',$arResult["NavQueryString"],$bxajaxid);
 ?>
-
 <script>
 	var ajax_nav = <?=CUtil::PhpToJSObject($arResult)?>;
 	var bxajaxid = "<?=$bxajaxid[1]?>";
@@ -15,8 +13,6 @@ if(!$do)
 {
 	?>
 	<div id ='ajax_nav'>
-		<button class="button show-more-items">Больше предложений</button>
-
 	</div>
 	<script type="text/javascript">
 		/* isset for javascript */
@@ -31,14 +27,12 @@ if(!$do)
 			}
 			return true;
 		}
-		$(document).ready(
+		BX.ready(
 			function()
 			{
-				// $(window).scroll(         // ленивая подгрузка элементов
-				$(".show-more-items").click(			// подгрузка элементов по клику
-
+				$(window).scroll(
 					function()
-					{	
+					{
 						if($(window).scrollTop()+$(window).height()>=$('#ajax_nav').offset().top)
 						{
 							if (ajax_nav.NavPageCount > ajax_nav.NavPageNomer )
@@ -68,14 +62,10 @@ if(!$do)
 										{
 											$('#ajax_nav').removeClass('bx-core-waitwindow');
 											bxajaxid = $('#ajax_nav').before(data);
-											ajax_sent = false;										
+											ajax_sent = false;											
 										});
-									if (ajax_nav.NavPageCount = ajax_nav.NavPageNomer) {
-										$(".show-more-items").remove();
-									}
 								}
 							}
-							
 						}
 					});
 			});
