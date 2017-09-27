@@ -579,3 +579,27 @@
 	RewriteEngine On
 	RewriteCond %{SERVER_PORT} 80
 	RewriteRule ^(.*)$ https://sports-tech.ru/$1 [R=301,L]
+
+42. Отследить ошибку при ajax-запросе на jquery
+	$.ajax({
+		error: function(jqXHR, exception)
+		{
+		if (jqXHR.status === 0) {
+		alert('Not connect.\n Verify Network.'); //  не включен инет
+		} else if (jqXHR.status == 404) {
+		alert('Requested page not found. [404]'); // нет такой страницы
+		} else if (jqXHR.status == 500) {
+		alert('Internal Server Error [500].'); // нет сервера такого
+		} else if (exception === 'parsererror') {
+		// ошибка в коде при парсинге
+		alert(jqXHR.responseText);
+		console.log("parse error");
+		} else if (exception === 'timeout') {
+		alert('Time out error.'); // недождался ответа
+		} else if (exception === 'abort') {
+		alert('Ajax request aborted.'); // прервался на стороне сервера
+		} else {
+		alert('Uncaught Error.\n' + jqXHR.responseText); // не знает что это
+		}
+		} // error
+	});
