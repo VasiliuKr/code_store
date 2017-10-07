@@ -603,3 +603,9 @@
 		}
 		} // error
 	});
+
+43. Удалить элемент массива php по значению элемента
+	$my_array = array("0" => "6546", "1" => "5506", "2" => "622");
+	if(($key = array_search("5506", $my_array)) !== false) {
+		unset($my_array[$key]);
+	}
