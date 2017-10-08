@@ -609,3 +609,26 @@
 	if(($key = array_search("5506", $my_array)) !== false) {
 		unset($my_array[$key]);
 	}
+
+44. Удалить привязку к определенному пользователю
+	$arSort = array("SORT" => "ASC");
+	$arFilter = array("IBLOCK_ID" => 23);
+	$arSelect = array("ID", "CODE", "NAME", "PROPERTY_VOTES", "PROPERTY_USER_VOTE");
+	// , где PROPERTY_USER_VOTE - свойство элемента типа "Привязка к пользователю"
+	$itemsList = CIBlockElement::GetList($arSort, $arFilter, false, false, $arSelect);
+	if ($itemsList->SelectedRowsCount() > 0) {
+	  while ($item = $itemsList->Fetch()) {
+
+	    if(in_array("5506", $item["PROPERTY_USER_VOTE_VALUE"])) {
+	    	// , где 5506 - ID пользователя
+
+	    	if(($key = array_search("5506", $item["PROPERTY_USER_VOTE_VALUE"])) !== false) {
+	    		unset($item["PROPERTY_USER_VOTE_VALUE"][$key]);
+	    	} // удаляем из массива элемент со значением 5506
+	    	
+	    	CIBlockElement::SetPropertyValues($item["ID"], 23, $item["PROPERTY_USER_VOTE_VALUE"], "USER_VOTE");
+	    	// устанавливаем в значение свойства USER_VOTE новый массив, где уже нет пользователя 5506
+	    }
+	    
+	  }
+	}
