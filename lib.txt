@@ -632,3 +632,16 @@
 	    
 	  }
 	}
+45. Проверка принадлежности пользователя к группе 
+	global $USER;
+	$groupID = 3; // ID группы
+	 
+	if (in_array($groupID,$USER->GetUserGroupArray())){
+	    echo 'Пользователь состоит в группе!';
+	} else {
+	    echo 'Пользователь вне группы...';
+	}
+
+46. Удалить все пробелы в строке js
+	var myStr = "1 000 000";
+	var strWithoutSpaces = myStr.replace(/\s/g, "");
