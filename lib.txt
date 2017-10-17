@@ -650,3 +650,40 @@
 	df -h
 	Просмотр размер папки
 	du -hs
+
+48. Фильтрация списка элементов по дате
+	Получение элементов с датой минус 2 дня от текущей минуты
+	$arFilter = Array(
+		">=DATE_INSERT" => array(ConvertTimeStamp(time()-86400 * 2, "FULL"))
+	);
+
+49. Обновить или добавить свойство заказа (не поля!)
+
+	$deilvery_nums = array("230605" => "YD230605", "230606" => "YD230606", "230607" => "YD230607"); // массив вида ID заказа Битрикс => произвольная строка
+	$arOrderTrackerProp = CSaleOrderProps::GetByID(31); // получаем данные свойства заказа с ID = 31
+
+	$arFilter = Array(">=DATE_INSERT" => array(ConvertTimeStamp(time()-86400 * 2, "FULL")));
+	$db_sales = CSaleOrder::GetList(array(), $arFilter); // получаем список заказов за 2 суток от текущей минуты
+	while ($ar_sales = $db_sales->Fetch())
+	{
+	    $db_props = CSaleOrderPropsValue::GetList(array(), array("ORDER_ID" => $ar_sales["ID"], "ORDER_PROPS_ID" => 31));
+	    if ($arVals = $db_props -> Fetch()) {
+	        CSaleOrderPropsValue::Update($arVals['ID'], array( // если свойство заполнено обновляем
+	          'NAME' => $arOrderTrackerProp['NAME'],
+	          'CODE' => $arOrderTrackerProp['CODE'],
+	          'ORDER_PROPS_ID' => $arVals['ORDER_PROPS_ID'],
+	          'ORDER_ID' => $ar_sales['ORDER_ID'],
+	          'VALUE' => $deilvery_nums[$arVals['ORDER_ID']],
+	        ));
+	        echo "update value<br>";
+	      } else {
+	        CSaleOrderPropsValue::Add(array(  // если свойство не заполнено, добавляем
+			  'NAME' => $arOrderTrackerProp['NAME'],
+	          'CODE' => $arOrderTrackerProp['CODE'],
+	          'ORDER_PROPS_ID' => 31,
+	          'ORDER_ID' => $ar_sales["ID"],
+	          'VALUE' => $deilvery_nums[$arVals['ORDER_ID']],
+	        ));
+	        echo "add value<br>";
+	      }
+	}
