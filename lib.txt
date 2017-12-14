@@ -276,6 +276,28 @@
 	}
 	?>
 
+	Если не помогло, можно воспользоваться решением https://toster.ru/q/92469
+	, где в init.php добавляем
+
+	define("PREFIX_PATH_404", "/404.php");
+	AddEventHandler("main", "OnAfterEpilog", "Prefix_FunctionName");
+	function Prefix_FunctionName() {
+	    global $APPLICATION;
+	    // Check if we need to show the content of the 404 page
+	    if (!defined('ERROR_404') || ERROR_404 != 'Y') {
+	        return;
+	    }
+	    // Display the 404 page unless it is already being displayed
+	    if ($APPLICATION->GetCurPage() != PREFIX_PATH_404) {
+	        header('X-Accel-Redirect: '.PREFIX_PATH_404);
+	        exit();
+	    }
+	}
+	этого будет достаточно для несуществующих элементов, а для разделов надо найти шаблон, который выводит "Раздел не найден" и в том условии добавить
+	
+	CHTTP::SetStatus("404 Not Found");
+	@define("ERROR_404","Y");
+
 21.Ограничить цикл foreach (php) количеством 2 элементов
 	$i = 0;
 	foreach($a as $key =>$one){
@@ -687,3 +709,9 @@
 	        echo "add value<br>";
 	      }
 	}
+50. Убрать ограничения на продолжительность работы скрипта при запуске из браузера (по умолчанию 30 сек)
+	В начало добавить
+	<?
+		ini_set('max_execution_time', 0);
+		set_time_limit(0);
+	?>
