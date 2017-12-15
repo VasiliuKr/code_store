@@ -715,3 +715,11 @@
 		ini_set('max_execution_time', 0);
 		set_time_limit(0);
 	?>
+
+51. Получить разницу в днях между текущей датой и заданной на php
+	$happyday = "13.12.2017";
+	$curday = date('d.m.Y');
+	$d1 = strtotime($happyday);
+	$d2 = strtotime($curday);
+	$diff = $d2-$d1;
+	$diff = $diff/(60*60*24);
