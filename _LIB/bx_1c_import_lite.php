@@ -109,7 +109,7 @@ function start(file)
                            load.style.display="none"; 
                            status="continue" 
                            proccess=false; 
-                           timer.innerHTML="<hr>Время выгрузки: <b>"+minute+" РјРёРЅ. "+m_second+" сек.</b>"; 
+                           timer.innerHTML="<hr>Время выгрузки: <b>"+minute+" мин. "+m_second+" сек.</b>"; 
                         } 
                         else 
                         { 
