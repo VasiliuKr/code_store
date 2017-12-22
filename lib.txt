@@ -729,3 +729,19 @@
 
 53. Поиск строки в содержании файлов через консоль
 	grep --include=\*.php -ri "text"
+
+54. Отловить все GET и POST запросы на сайте Битрикс
+	в init.php добавим
+	if(isset($_REQUEST) && count($_REQUEST)>0){
+	        $data="";
+	        foreach($_REQUEST as $key=>$val){
+	                if(is_string($val) && strlen($val)>2000 )
+	                        $val=substr($val,0,2000);
+	                $data.=$key."=>".$val."\n";
+	        }
+	        $fp=fopen("/home/bitrix/ext_www/nextgame.dev.o2k.ru/".date("Ymd").".log","a");
+	        fwrite($fp,date("Y-m-d H:i:s")." ".$_SERVER['REMOTE_ADDR']." ".$_SERVER['SCRIPT_FILENAME']."\n".$data."---------------------------\n");
+	        fclose($fp);
+	        $data="";
+	        reset($_REQUEST);
+	}
