@@ -66,3 +66,6 @@ Git How To - http://githowto.com/ru/
 Магия Git - http://diseaz.github.io/gitmagic/
 
 советы на Хабре https://habrahabr.ru/company/mailru/blog/267595/
+
+влить коммиты с удаленного репозитория ветки tmp в свою локальную ветку
+git merge origin/tmp
