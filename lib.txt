@@ -118,7 +118,7 @@
 	    counter-increment: sub-list;
 	    content: counter(parent-list) "." counter(sub-list) ". ";
 	}
-14.Подгрузка блока HTML через ajax на сайте Битрикс
+14.Подгрузка блока HTML через ajax сайте Битрикс
 	в main.js
 	window.addEventListener('load',function() {
     if (BX('eto_budet_slider') != null) {						// если на странице есть элемент с id="eto_budet_slider"
@@ -745,3 +745,6 @@
 	        $data="";
 	        reset($_REQUEST);
 	}
+ 55. Переезд на https Битрикс
+ 	https://www.sng-it.ru/perevod-sayta-na-https/
+ 	https://www.intervolga.ru/blog/marketing/https-switching/
