@@ -748,3 +748,10 @@
  55. Переезд на https Битрикс
  	https://www.sng-it.ru/perevod-sayta-na-https/
  	https://www.intervolga.ru/blog/marketing/https-switching/
+
+ 56. Удаление всех записей множественного свойства типа "Файл" (например, очистить массив картинок свойства элемента)
+ 	$el->SetPropertyValuesEx(
+       $arUpdate[$val],     // ID элемента        
+       $IBLOCK_ID,       	// ID инфоблока      
+       array('MORE_PHOTO' => array('VALUE' => array("del" => "Y")))         // MORE_PHOTO - символьный код свойства
+    );
