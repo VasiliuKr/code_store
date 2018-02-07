@@ -745,13 +745,18 @@
 	        $data="";
 	        reset($_REQUEST);
 	}
- 55. Переезд на https Битрикс
- 	https://www.sng-it.ru/perevod-sayta-na-https/
- 	https://www.intervolga.ru/blog/marketing/https-switching/
+55. Переезд на https Битрикс
+	https://www.sng-it.ru/perevod-sayta-na-https/
+	https://www.intervolga.ru/blog/marketing/https-switching/
 
- 56. Удаление всех записей множественного свойства типа "Файл" (например, очистить массив картинок свойства элемента)
- 	$el->SetPropertyValuesEx(
+56. Удаление всех записей множественного свойства типа "Файл" (например, очистить массив картинок свойства элемента)
+	$el->SetPropertyValuesEx(
        $arUpdate[$val],     // ID элемента        
        $IBLOCK_ID,       	// ID инфоблока      
        array('MORE_PHOTO' => array('VALUE' => array("del" => "Y")))         // MORE_PHOTO - символьный код свойства
     );
+
+57. Вывод количества элементов инфоблока
+	$arFilter = Array("IBLOCK_ID"=>10, "ACTIVE"=>"Y");
+	$res_count = CIBlockElement::GetList(Array(), $arFilter, Array(), false, Array());
+	echo $res_count;
