@@ -19,3 +19,11 @@ https://docs.google.com/document/d/1kHOHrcWpv07YrOV9lwtohl-cOQ-MW_bLYi71EeXslSw/
 4. Удаляю старую ветку локально git branch -d feature-16951
 5. Веду работы по задаче
 6. Коммичу, вливаю коммиты на dev
+
+
+Как куратор
+	Готовый релиз вливаю в dev и мастер
+	На gitlab удаляю релизную ветку release-1.0, а также feature-ветки, учавствовавшие в релизе, создаю release-1.1
+	В терминале на релизном сайте 
+		git checkout -b release-1.1   // переключаюсь на новую релизную ветку
+		git branch -d release-1.0     // удаляю локально старую релизную ветку
