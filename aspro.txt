@@ -1,0 +1,23 @@
+Аспро Next
+
+- Добавить поле (свойство заказа) в форму быстрого заказа (Купить в один клик), которого нет в списке в настройках Аспро
+	В файлах /ajax/one_click_buy.php и /ajax/one_click_buy_basket.php добавить необходимое свойство в массив PROPERTIES
+	Например, адрес доставки 
+	было "PROPERTIES" => (strlen($tmp = COption::GetOptionString('aspro.next', 'ONECLICKBUY_PROPERTIES', 'FIO,PHONE,EMAIL,COMMENT', SITE_ID)) ? explode(',', $tmp) : array()),
+	стало "PROPERTIES" => (strlen($tmp = COption::GetOptionString('aspro.next', 'ONECLICKBUY_PROPERTIES', 'FIO,PHONE,EMAIL,COMMENT', SITE_ID) . ',ADDRESS') ? explode(',', $tmp) : array()),
+
+- Нельзя подписать пользователя на рассылку через API - выходит ошибка "Согласитесь с условиями"
+	Ошибка возникает из-за обработчика события OnBeforeSubscriptionAddHandler в нашем модуле - он проверяет, если в модуле настроек решения установлен параметр "Информирование об обработке персональных данных" - то галочка согласия должна быть проставлена. 
+	Простейший способ обойти - передать GET параметр licenses_subscribe со значением Y. Например: http://smenawear.krasnov.o2k.ru/test/?licenses_subscribe=Y
+
+- Добавление счетчиков Яндекс Метрики и пр.
+	Добавить код счетчиков в файл include/invis-counter.php
+
+- Добавление целей Яндекс метрики и Google Tag Manager
+	Для добавления целей на успешную отправку форм, типа Заказать звонок, Задать вопрос необходимо добавить скрипт с целью в соответствующие файлы, выводящие информацию при успешной отправке форм
+	Данные файлы по стандартным формам Аспро находятся в include/form/
+	Например, цель для успешной отправки формы Заказать звонок - в файл include/form/success_CALLBACK.php добавим
+		<script>
+			yaCounter45280497.reachGoal('call');
+			gtag('event','Заказать звонок',{'event_category':'call','event_action':'call_send',});
+		</script>

@@ -28,7 +28,7 @@
 	$sectionImg = CFile::ShowImage($ar_res['PICTURE']);   // получаем картинку текущего раздела, в параметрамх можно указать размеры и т.д.
 	<div><?=sectionImg?></div>   выводим картинку в нужном месте в разметке
 	либо
-	$sectionImg = File::GetFileArray($ar_res['PICTURE']);  // получаем массив данных картинки
+	$sectionImg = CFile::GetFileArray($ar_res['PICTURE']);  // получаем массив данных картинки
 	или $sectionImg = CFile::GetPath($ar_res['PICTURE']);  // получаем путь картинки
 	<img src="<?=$sectionImg['SRC']?>"   выводим картинку в нужном месте в разметке
 	
@@ -50,6 +50,11 @@
 		</script>
 	<?}?>
 	Параметр для отладки ?_ym_debug=1 в конец url
+
+	Антивирус Касперского может блокировать загрузку внешнего скрипта Яндекс.Метрики (как и некоторых других внешних скриптов), поэтому на сайте могут возникать js-ошибки типа "yaCounter45280497 is not defined" и переставать частино работать js. Чтобы избежать подобных проблем, можно завернуть цель в условие
+		if (typeof yaCounter45280497 !== 'undefined') {
+			yaCounter45280497.reachGoal('basket');
+		}
 
 8.Добавление нового значения в заранее известное свойство типа "список"
 	<?
@@ -762,3 +767,23 @@
 	$arFilter = Array("IBLOCK_ID"=>10, "ACTIVE"=>"Y");
 	$res_count = CIBlockElement::GetList(Array(), $arFilter, Array(), false, Array());
 	echo $res_count;
+
+58. Редирект со страниц my-stie.ru/catalog/index.php на my-stie.ru/catalog/   (избавление от index.php на конце) на Битрикс
+	В .htaccess в раздел <IfModule mod_rewrite.c> добавить
+
+	RewriteCond %{THE_REQUEST} /(.*)index.php.*$
+	RewriteCond %{THE_REQUEST} !bitrix/admin/
+	RewriteRule .* /%1 [R=301,L]
+
+	Проверить нормально ли работает авторизация в адмику битрикс, а также ajax (оформление заказа)
+	Лучше вариант отсюда https://dev.1c-bitrix.ru/community/webdev/user/3954/blog/1818/?commentId=12582
+
+	RewriteCond %{REQUEST_URI} ^(.*)/$
+	RewriteRule .* - [L]
+	RewriteCond %{ENV:REDIRECT_STATUS} 200
+	RewriteRule .* - [L]
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{REQUEST_URI} ^(.*)/index.php$
+	RewriteRule ^(.*)$ %1/ [R=301,L]
+
+	Но может медленно открываться админка битрикс
