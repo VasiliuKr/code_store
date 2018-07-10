@@ -787,3 +787,24 @@
 	RewriteRule ^(.*)$ %1/ [R=301,L]
 
 	Но может медленно открываться админка битрикс
+
+59. При подключении компонента на странице, формируемой ajax-ом, могут вылетать js-ошибки, т.к. не все js-скрипты могуть быть подключены.
+	Для решения проблемы на аяксовой странице дообавить $APPLICATION->ShowAjaxHead();
+
+60. Хак для slick.js. Скрытие изображений до инициализации слайдера
+	CSS
+	#slider{
+	    height: 1px;
+	    overflow: hidden;
+	    visibility: hidden;
+	    transition: height 0.2s linear;
+	}
+
+	JS
+	$('#slider').on('init', function () {
+	  $('#slider').css({
+	    height: 'auto',
+	    visibility: 'visible'
+	  });
+	});
+	$('#slider').slick();
