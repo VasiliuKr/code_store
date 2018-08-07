@@ -808,3 +808,43 @@
 	  });
 	});
 	$('#slider').slick();
+
+61. Отслеживание изменения состояния элемента DOM, например, data-атрибута
+	var targetStreet = $('[data-type="street"]');  // элемент у которого будем отслеживать атрибут data-kladr-id
+    var config = {
+        childList: false,
+        subtree: false,
+        attributes: true,
+        characterData: false
+    };
+    
+    var observer = new MutationObserver(function (mutationRecords, observer) {
+	    mutationRecords.forEach(function (mutation) {
+	    	var streetIdForZip = $(mutation.target).attr('data-kladr-id');
+	    	console.log(mutation);
+	        if(typeof streetIdForZip !== 'undefined' && mutation.attributeName == 'data-kladr-id') {
+	        	console.log(streetIdForZip);
+	        }
+	    });
+	});
+	observer.observe(targetStreet[0], config);
+
+62. Определение сенсорного устройства на js
+
+	function is_touch_device() {
+		return 'ontouchstart' in window        // works on most browsers 
+		|| navigator.maxTouchPoints;       // works on IE10/11 and Surface
+	};
+	// если устройство сенсорное, добавим класс touch для html, иначе no-touch
+	if ( is_touch_device() ) {
+		$('html').addClass('touch');
+	} else {
+		$('html').addClass('no-touch');
+	}
+
+63. Скрыть активное неслужебное свойство заказа в sale.order.ajax 
+	https://dev.1c-bitrix.ru/support/forum/forum6/topic98265/
+	в файл order_ajax.js в функцию getPropertyRowNode: function(property, propsItemsContainer, disabled) добавить
+	if ( property.getId() == 1 ){
+        propsItemNode.style='display:none;';
+    }

@@ -69,3 +69,9 @@ Git How To - http://githowto.com/ru/
 
 влить коммиты с удаленного репозитория ветки tmp в свою локальную ветку
 git merge origin/tmp
+
+Удалить добавленные не проиндексированные файлы (untracked)
+git clean -f
+
+Удалить добавленные не проиндексированные папки (untracked)
+git clean -f -d
