@@ -40,3 +40,10 @@ https://docs.google.com/document/d/1kHOHrcWpv07YrOV9lwtohl-cOQ-MW_bLYi71EeXslSw/
 	Отмечаю хотфикс тегом git tag -a 1.1.2 -m 'hotfix 1.1.2'
 	Пуш тега в репозиторий git push origin 1.1.2 (если один тег) или git push origin --tags (если много)
 	Если вливал на мастер с хотфикса, то обновим dev git pull origin master
+
+
+Новая схема
+1) Ветки "feature" и "hotfix" делаем от "master"
+2) Ветки "feature" и "hotfix" сначала сливаем в "release" - тестируем - если все ок - выкатываем на бой (именно ветки "feature" и "hotfix")
+3) dev-ветку пока оставляем, для запаса )
+4) ветка "release" не удаляется, а только обновляется с мастера (если на нем есть изменения)
