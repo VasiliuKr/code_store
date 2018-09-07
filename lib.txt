@@ -848,3 +848,12 @@
 	if ( property.getId() == 1 ){
         propsItemNode.style='display:none;';
     }
+
+64. Вход в админку Битрикс через ftp
+	Создаем страницу со скриптом и заходим на нее
+		<?require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php"); 
+		global $USER; 
+		$USER->Authorize(1); 
+		@unlink(__FILE__); 
+		LocalRedirect("/bitrix/admin/"); 
+		require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
