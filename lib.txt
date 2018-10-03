@@ -735,7 +735,7 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "text"
+	grep --include=\*.php -ri "AddViewContent"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим

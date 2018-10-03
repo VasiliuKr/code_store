@@ -77,10 +77,10 @@ git clean -f
 git clean -f -d
 
 Откатить последние два коммита, которые есть в удаленном репозитории
-1)  git reset --hard commit_id
+1)  git reset --hard COMMIT_ID
 	git push -f 
 	Но такой вариант не прокатит на master, т.к. скорее всего она защищена от форсированного пуша
 
-2)  git reset --hard commit_id
+2)  git reset --hard COMMIT_ID
 	git reset --soft @{1}
 	git commit -m "reset last commits" && git push
