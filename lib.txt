@@ -735,7 +735,7 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "AddViewContent"
+	grep --include=\*.php -ri "text"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим
@@ -863,3 +863,6 @@
 		global $USER;
 		if ($USER->IsAdmin()) echo "Вы администратор!";
 	?>
+
+66. Зайти в терминале из root-пользователя в другого пользователя
+	sudo -u bitrix mc
