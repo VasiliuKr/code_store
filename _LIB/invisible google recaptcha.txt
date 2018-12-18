@@ -1,0 +1,41 @@
+https://habr.com/post/320664/  - пост на Хабр
+https://www.google.com/recaptcha/admin#list  - получить код рекапчи
+https://developers.google.com/recaptcha/docs/invisible  - офф.документация
+
+
+Ключ
+Добавьте этот ключ в HTML-код сайта.
+6LeqJHUUAAAAAH3Z9_cceNEAFyczXzshakWikaXX
+
+Секретный ключ
+Этот ключ нужен для связи между вашим сайтом и Google. Никому его не сообщайте.
+6LeqJHUUAAAAAG3xDAYbngBJqW_faW9ZU4K0GqyJ
+
+Шаг 1. Интеграция на стороне клиента
+Вставьте этот фрагмент перед закрывающим тегом </head> в HTML-коде:
+<script src='https://www.google.com/recaptcha/api.js'></script>
+Добавьте этот фрагмент кода в конец тега <form>, чтобы создать кнопку, защищенную с помощью reCAPTCHA. Для обработки результатов необходимо также создать функцию обратного вызова.
+	<button class="g-recaptcha" data-sitekey="6LeqJHUUAAAAAH3Z9_cceNEAFyczXzshakWikaXX"	data-callback="YourOnSubmitFn">Submit</button>
+
+Шаг 2. Интеграция на стороне сервера
+Когда пользователи отправляют форму со встроенной проверкой reCAPTCHA, вместе с прочими данными вы получаете строку "g-recaptcha-response". Чтобы узнать, прошел ли пользователь проверку, отправьте POST-запрос со следующими параметрами:
+	URL: https://www.google.com/recaptcha/api/siteverify
+	secret (обязательно)	6LeqJHUUAAAAAG3xDAYbngBJqW_faW9ZU4K0GqyJ
+	response (обязательно)	Значение "g-recaptcha-response".
+	remoteip	IP-адрес конечного пользователя.
+
+Пример добавления в форму "Снять денежные средства" на http://kred-bank.krasnov.o2k.ru/service/dlya_korporativnyh_klientov/zakazat_summu/  (веб-форма с js-валидацией)
+1. В шаблоне в header.php добавляем <script src='https://www.google.com/recaptcha/api.js'></script> перед закрывающим </head>
+2. В разметку формы добавляем 
+	<div id='recaptcha' class="g-recaptcha"
+		data-sitekey="6LeqJHUUAAAAAH3Z9_cceNEAFyczXzshakWikaXX"  // наш ключ для сайта
+		data-callback="onSubmit"                                 // функция-callback
+		data-size="invisible">
+	</div>
+3. Определяем функцию-callback, внутри которой вызываем submit формы, который ранее отрабатывал сразу после js-валидации
+	function onSubmit(token) {
+		$('#callback_form').submit();
+	}
+	В данной функции также можно сделать ajax-запрос для обработки $_POST['g-recaptcha-response']
+4. В блоке кода, отрабатываемом в случае успешной валидации добавляем
+	grecaptcha.execute();
