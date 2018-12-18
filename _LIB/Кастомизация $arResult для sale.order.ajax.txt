@@ -1,0 +1,30 @@
+Кастомизация нового шаблона sale.order.ajax осуществляется полностью средставми JS. Для этого лучше не вносить изменения в сам файл order_ajax.js, а создать новый order_ajax_ext.js, как это советует Олег. https://www.olegpro.ru/post/1c_bitriks_kastomizaciya_novogo_shablona_komponenta_saleorderajax.html
+
+Есть событие OnSaleComponentOrderJsDataHandler, в котором мы можем поймать тот массив, который летит в ajax-обработчик для дальнейшего отображения и что-то поменять в нем.
+Для этого в init.php
+
+use Bitrix\Main\EventManager;
+
+$eventManager = EventManager::getInstance();
+$eventManager->addEventHandler("sale", "OnSaleComponentOrderJsData", "OnSaleComponentOrderJsDataHandler");
+
+function OnSaleComponentOrderJsDataHandler(&$arResult) {
+
+    // Кастомизация результирующего массива для sale.order.ajax - вывод картинки-"несхемы"
+    foreach ($arResult['JS_DATA']['GRID']['ROWS'] as $id => $item) {
+        $realProductId = CCatalogSku::GetProductInfo($item['data']['PRODUCT_ID']);
+        $arResize = array("height" => 160, "width" => 160);
+        $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL;
+        $arrImages = getPhotoTypeArray($realProductId, $arResize, $resizeType);
+        $arrImages=array_reverse($arrImages);
+        foreach ($arrImages as $key => $col) {
+            foreach ($col as $key2 => $value) {
+                $arr[]=$value;
+            }
+        }
+        $arResult['JS_DATA']['GRID']['ROWS'][$id]['data']['DETAIL_PICTURE_SRC'] = $arr[0]['SRC'];
+        unset($arr);
+    }
+}
+
+Теперь у нас в детальных картинках новые пути
