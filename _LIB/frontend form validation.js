@@ -19,7 +19,7 @@ function validateForm(form) {
 			}
 
 			if (element.attr('type') == 'tel') {
-				var rv_tel = /(\+?\d[- .]*){7,13}/;
+				var rv_tel = /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{2,3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
 				if(val != '' && !val.match(rv_tel)) {
 					valid = false;
 				}
