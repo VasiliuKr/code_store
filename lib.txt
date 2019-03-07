@@ -866,3 +866,7 @@
 
 66. Зайти в терминале из root-пользователя в другого пользователя
 	sudo -u giveweb mc
+
+67. Для синхронизации аплоада можно юзать команду
+	rsync -avh --delete --recursive --progress ~/ext_www/de-light.ru/upload ~/ext_www/release.de-light.ru
+	Вначале указывается источник, потом каталог назначения

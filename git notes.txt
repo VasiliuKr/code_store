@@ -84,3 +84,21 @@ git clean -f -d
 2)  git reset --hard COMMIT_ID
 	git reset --soft @{1}
 	git commit -m "reset last commits" && git push
+
+
+Решение конфликтов локально при мердже feature-19287 на release-1.2 (инструкция от Gitlab)
+	Step 1. Fetch and check out the branch for this merge request
+
+	git fetch origin
+	git checkout -b feature-19287 origin/feature-19287
+
+	Step 2. Review the changes locally
+
+	Step 3. Merge the branch and fix any conflicts that come up
+
+	git checkout release-1.2
+	git merge --no-ff feature-19287
+
+	Step 4. Push the result of the merge to GitLab
+
+	git push origin release-1.2
