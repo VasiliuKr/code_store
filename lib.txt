@@ -735,7 +735,7 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "text"
+	grep --include=\*.php -ri "REGION_NAME_DECLINE_PP"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим
@@ -868,8 +868,14 @@
 	sudo -u giveweb mc
 
 67. Для синхронизации аплоада можно юзать команду
-	rsync -avh --delete --recursive --progress ~/ext_www/de-light.ru/upload ~/ext_www/release.de-light.ru
-	Вначале указывается источник, потом каталог назначения (в терминале зайти в папку сайта назначения, но вроде это необязательно)
+	В пределах одного сервера
+		rsync -avh --delete --recursive --progress ~/ext_www/de-light.ru/upload ~/ext_www/release.de-light.ru
+		Вначале указывается источник, потом каталог назначения (в терминале зайти в папку сайта назначения, но вроде это необязательно)
+	Между серверами
+	Скопируем папку upload с релизного сайта de-light на сервер dev.o2k.ru
+	Команда вводится на сервере источника (de-light.ru)
+		rsync -av --progress --delete --hard-links --acls --xattrs --numeric-ids -e "ssh -p3232" ~/ext_www/release.de-light.ru/upload bitrix@de-light.dev.o2k.ru:/home/shared/de-light/
+	В слуачае необходимости копирования на боевой сервер необходимо подключаться через порт 22 (ssh -22)
 
 68. Если на сервере скрипт не срабатывает из-за отсутствующего модуля PHP, нужно проделать следующее:
 	1) заходим на сервер под рутом

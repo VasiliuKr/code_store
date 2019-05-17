@@ -102,3 +102,6 @@ git clean -f -d
 	Step 4. Push the result of the merge to GitLab
 
 	git push origin release-1.2
+
+Откат мерджа
+git revert -m 1 COMMIT_ID ,где COMMIT_ID - id коммита-мерджа
