@@ -735,7 +735,7 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "REGION_NAME_DECLINE_PP"
+	grep --include=\*.php -ri "1c_exchange.php"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим
@@ -874,7 +874,7 @@
 	Между серверами
 	Скопируем папку upload с релизного сайта de-light на сервер dev.o2k.ru
 	Команда вводится на сервере источника (de-light.ru)
-		rsync -av --progress --delete --hard-links --acls --xattrs --numeric-ids -e "ssh -p3232" ~/ext_www/release.de-light.ru/upload bitrix@de-light.dev.o2k.ru:/home/shared/de-light/
+		rsync -av --progress --delete --hard-links --acls --xattrs --numeric-ids -e "ssh -p3232" ~/www/upload bitrix@organicmarket.dev.o2k.ru:/home/shared/organicmarket/
 	В слуачае необходимости копирования на боевой сервер необходимо подключаться через порт 22 (ssh -22)
 
 68. Если на сервере скрипт не срабатывает из-за отсутствующего модуля PHP, нужно проделать следующее:
@@ -887,3 +887,7 @@
 	4) переименовываем файл с заменой пустого
 	mv 20-dom.ini.disabled 20-dom.ini
 	5) service httpd restart
+
+69. Если соединение с 1С выдает ошибку "Неверный логин или пароль ...", хотя доступы верные, права у пользователя админские и все верно, то следует попробовать отключить следующее (но только на тестовом сайте!):
+	Только перед этим проверьте, пожалуйста, наблюдается ли проблема после переименования всей папки /bitrix/php_interface/include/, файла /bitrix/php_interface/init.php и всех папок от сторонних решений в директории /bitrix/modules/. 
+	Так же не должно быть сторонних решений в папке /local/, которая может размещаться в корневой папке сайта.
