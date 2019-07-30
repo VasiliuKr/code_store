@@ -1,0 +1,24 @@
+1. Подключиться к БД
+	Зайти в консоль под пользователем root и команда mysql
+	Либо ввести команду mysql -u root -p
+
+2. Показать базы данных
+	SHOW DATABASES;
+
+3. Создать БД
+	CREATE DATABASE [database_name];
+	например, CREATE DATABASE qwu8nendb;
+
+4. Создать пользователя для БД
+	GRANT ALL PRIVILEGES ON имя_базы.* TO имя_пользователя@localhost IDENTIFIED BY 'пароль_пользователя';
+	localhost можно заменить на IP, например  GRANT ALL PRIVILEGES ON qwu8nendb.* TO qwu8nenuser@192.168.1.55 IDENTIFIED BY 'BQ1YHIVFxcMYnFB';
+	добавить пользователя БД без указания сервера (для всех серверов) GRANT ALL PRIVILEGES ON qwu8nendb.* TO qwu8nenuser IDENTIFIED BY 'BQ1YHIVFxcMYnFB';
+
+5. Просмотр всех пользователей MySQL
+	SELECT user FROM mysql.user;
+
+6. Посмотреть MySQL пользователей, их пароли и хосты:
+	SELECT user,host,password FROM mysql.user;
+
+7. Удалить пользователя 'test'@'localhost'
+	drop user 'test'@'localhost';

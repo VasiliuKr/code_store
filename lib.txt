@@ -735,7 +735,7 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "1c_exchange.php"
+	grep --include=\*.php -ri "showAuthFormAction"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим
@@ -874,7 +874,7 @@
 	Между серверами
 	Скопируем папку upload с релизного сайта de-light на сервер dev.o2k.ru
 	Команда вводится на сервере источника (de-light.ru)
-		rsync -av --progress --delete --hard-links --acls --xattrs --numeric-ids -e "ssh -p3232" ~/www/upload bitrix@organicmarket.dev.o2k.ru:/home/shared/organicmarket/
+		rsync -av --progress --delete --hard-links --acls --xattrs --numeric-ids -e "ssh -p3232" ~/ext_www/lloom.ru/upload bitrix@lloom.dev.o2k.ru:/home/shared/lloom/
 	В слуачае необходимости копирования на боевой сервер необходимо подключаться через порт 22 (ssh -22)
 
 68. Если на сервере скрипт не срабатывает из-за отсутствующего модуля PHP, нужно проделать следующее:
