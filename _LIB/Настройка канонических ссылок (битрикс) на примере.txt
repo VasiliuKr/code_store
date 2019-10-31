@@ -1,0 +1,35 @@
+Проект perchatki21.ru
+
+Требования:
+Надо настроить абсолютные канонические ссылки:
+1. Чтобы не было дублей товаров, т.е. если одни товар привязан к нескольким разделом, то каноническая ссылка должна быть на родительский раздел. Пример:
+- https://perchatki21.ru/catalog/perchatki_zimnie/rukavitsy_uteplennye_vatin/
+- https://perchatki21.ru/catalog/rukavitsy/rukavitsy_uteplennye_vatin/
+2. На всех страницах сайта должны быть канонические ссылки, кроме раздела https://perchatki21.ru/personal/ (Пример: https://perchatki21.ru/personal/cart/, https://perchatki21.ru/personal/order/make/ и т.д.).
+3. На главной странице должна быть каноническая ссылка вида: https://perchatki21.ru/
+4. Канонические ссылки должны быть и на страницах с параметрам в URL на без параметра в url.
+
+1. В header шаблона сайта добавляем следующий код
+<?
+$curPage = $APPLICATION->GetCurPage(false);
+$canonical = "";
+if ($curPage == '/') {
+    $canonical = 'https://perchatki21.ru/';
+} elseif (strpos($curPage, '/personal/') === false) {
+    $canonical = 'https://perchatki21.ru' . $curPage;
+}
+if (strlen($canonical)>0) {
+    $APPLICATION->SetPageProperty("canonical", $canonical);
+}
+?>
+Он установит канонические ссылки на всех страницах 1) без GET-параметров 2) кроме страниц раздела /personal/ 3) для главной - https://perchatki21.ru/
+
+2. Настроим каноникалы в каталоге для товаров, привязанных к 2 и более разделам
+	2.1. Проверяем и если надо изменяем настройки ИБ Каталог
+		2.1.1 Вкладка "Поля" установить галочки "Привязка к разделам" и "Разрешить выбор основного раздела для привязки."
+		2.1.2 Вкладка "Инфоблок" Канонический URL элемента: установить значение Протокол + домен + URL страницы детального просмотра, например,
+				https://perchatki21.ru/catalog/#SECTION_CODE#/#ELEMENT_CODE#/
+	2.2. Настройки комплексного компонента "Каталог"
+		2.2.1 в параметрах вызова "DETAIL_SET_CANONICAL_URL" => "Y"
+		2.2.2 в файле element.php 'SET_CANONICAL_URL' => $arParams['DETAIL_SET_CANONICAL_URL']
+		 		или 'SET_CANONICAL_URL' => 'Y',
