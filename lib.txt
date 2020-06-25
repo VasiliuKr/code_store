@@ -231,7 +231,7 @@
 	CAgent::CheckAgents() вызывается два раза специально, чтобы выполнить как периодические агенты, так и не периодические. 
 	Если вам требуется, чтобы данный файл отвечал еще и за бекап, откомментируйте последнюю строчку.
 
-	4. Добавить данный скрипт в cron */5 * * * * /usr/bin/php -f /home/bitrix/www/bitrix/php_interface/cron_events.php (раз в 5 минут)
+	4. Добавить данный скрипт в cron */5 * * * * /usr/bin/php -f /home/bitrix/ext_www/2po2.ru/bitrix/php_interface/cron_events.php (раз в 5 минут)
 
 19.Получение всех подразделов инфоблока
 	<?
@@ -735,7 +735,9 @@
 	https://habrahabr.ru/post/133993/
 
 53. Поиск строки в содержании файлов через консоль
-	grep --include=\*.php -ri "text"
+	grep --include=\*.php -ri "test"
+	если нужно найти целое слово, не "testsome", а именно "test", то
+	grep --include=\*.php -riw "test"
 
 54. Отловить все GET и POST запросы на сайте Битрикс
 	в init.php добавим
@@ -771,9 +773,7 @@
 58. Редирект со страниц my-stie.ru/catalog/index.php на my-stie.ru/catalog/   (избавление от index.php на конце) на Битрикс
 	В .htaccess в раздел <IfModule mod_rewrite.c> добавить
 
-	RewriteCond %{THE_REQUEST} /(.*)index.php.*$
-	RewriteCond %{THE_REQUEST} !bitrix/admin/
-	RewriteRule .* /%1 [R=301,L]
+	f
 
 	Проверить нормально ли работает авторизация в адмику битрикс, а также ajax (оформление заказа)
 	Лучше вариант отсюда https://dev.1c-bitrix.ru/community/webdev/user/3954/blog/1818/?commentId=12582
