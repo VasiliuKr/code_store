@@ -83,7 +83,7 @@ git clean -f -d
 
 2)  git reset --hard COMMIT_ID
 	git reset --soft @{1}
-	git commit -m "reset last commits" && git push
+	git commit -m "reset fix links" && git push
 
 
 Решение конфликтов локально при мердже feature-19287 на release-1.2 (инструкция от Gitlab)
@@ -109,3 +109,8 @@ git revert -m 1 COMMIT_ID ,где COMMIT_ID - id коммита-мерджа
 
 Удалить новые непроиндексированные файлы и папки
 	git clean -fd
+
+Исключить индексируемую папку /test из индекса git
+	Добавить /test в .gitignore
+	git rm -r --cached test   // удаляем папку из репозитория
+	git commit -m "delete test dir from git" && git push
