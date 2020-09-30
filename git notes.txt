@@ -114,3 +114,10 @@ git revert -m 1 COMMIT_ID ,где COMMIT_ID - id коммита-мерджа
 	Добавить /test в .gitignore
 	git rm -r --cached test   // удаляем папку из репозитория
 	git commit -m "delete test dir from git" && git push
+
+Установить git в непустой папке и связать с удаленным репозиторием
+	cd project
+	git init
+	git remote add origin git@git.o2k.ru:koftyonyshi/koftyonyshi.ru.git
+	git fetch
+	git checkout -t origin/master
